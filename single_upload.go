@@ -2,6 +2,7 @@ package omegastorage
 
 import (
 	"io"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -40,7 +41,7 @@ func (s *Storage) Upload(u *UploadObjectInput) (*ObjectUploadOutput, error) {
 
 	ur := &ObjectUploadOutput{
 		Location: result.Location,
-		ETag:     *result.ETag,
+		ETag:     strings.Trim(*result.ETag, "\""),
 	}
 	return ur, nil
 }

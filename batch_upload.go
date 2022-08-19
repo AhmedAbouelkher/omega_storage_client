@@ -35,9 +35,14 @@ func configureUploadIter(b *BatchUploadInput) *s3manager.UploadObjectsIterator {
 	var objects []s3manager.BatchUploadObject
 	for _, o := range b.Objects {
 
+		bkt := o.Bucket
+		if bkt == "" {
+			bkt = b.Bucket
+		}
+
 		objects = append(objects, s3manager.BatchUploadObject{
 			Object: &s3manager.UploadInput{
-				Bucket:   aws.String(b.Bucket),
+				Bucket:   aws.String(bkt),
 				Key:      aws.String(path.Join(b.Folder, o.Key)),
 				Body:     o.Body,
 				Metadata: aws.StringMap(o.Metadata),
