@@ -14,10 +14,10 @@ type BatchUploadInput struct {
 	Folder  string
 }
 
-func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
+func (s *Storage) BatchUpload(b *BatchUploadInput) error {
 	sess, err := s.GetSession()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Create an uploader with the session and default options
@@ -25,10 +25,10 @@ func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
 	iter := configureUploadIter(b)
 
 	if err := svc.UploadWithIterator(context.Background(), iter); err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 func configureUploadIter(b *BatchUploadInput) *s3manager.UploadObjectsIterator {
