@@ -23,7 +23,7 @@ func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
 
 	// Create an uploader with the session and default options
 	svc := s3manager.NewUploader(sess)
-	iter := configureIter(b, cfg)
+	iter := configureUploadIter(b, cfg)
 
 	if err := svc.UploadWithIterator(context.Background(), iter); err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
 	return nil, nil
 }
 
-func configureIter(b *BatchUploadInput, cfg *S3Config) *s3manager.UploadObjectsIterator {
+func configureUploadIter(b *BatchUploadInput, cfg *S3Config) *s3manager.UploadObjectsIterator {
 	var objects []s3manager.BatchUploadObject
 	for _, o := range b.Objects {
 

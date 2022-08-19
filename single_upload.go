@@ -13,12 +13,12 @@ type ObjectInput struct {
 	Metadata map[string]string
 }
 
-type ObjectUpload struct {
+type ObjectUploadOutput struct {
 	Location string
 	ETag     string
 }
 
-func (s *Storage) Upload(obj *ObjectInput) (*ObjectUpload, error) {
+func (s *Storage) Upload(obj *ObjectInput) (*ObjectUploadOutput, error) {
 	cfg := s.Config
 
 	sess, err := s.GetSession()
@@ -39,7 +39,7 @@ func (s *Storage) Upload(obj *ObjectInput) (*ObjectUpload, error) {
 		return nil, err
 	}
 
-	u := &ObjectUpload{
+	u := &ObjectUploadOutput{
 		Location: result.Location,
 		ETag:     *result.ETag,
 	}

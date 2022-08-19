@@ -5,11 +5,11 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-type ObjectMetadata struct {
+type ObjectMetadataOutput struct {
 	Metadata map[string]string
 }
 
-func (s *Storage) GetMetadata(key string) (*ObjectMetadata, error) {
+func (s *Storage) GetMetadata(key string) (*ObjectMetadataOutput, error) {
 	cfg := s.Config
 
 	sess, err := s.GetSession()
@@ -28,7 +28,7 @@ func (s *Storage) GetMetadata(key string) (*ObjectMetadata, error) {
 		return nil, err
 	}
 
-	return &ObjectMetadata{
+	return &ObjectMetadataOutput{
 		Metadata: aws.StringValueMap(md.Metadata),
 	}, nil
 }
