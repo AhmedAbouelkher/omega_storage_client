@@ -1,4 +1,4 @@
-module github.com/AhmedAbouelkher/omega_storage
+module github.com/AhmedAbouelkher/omega_storage_client
 
 go 1.18
 
