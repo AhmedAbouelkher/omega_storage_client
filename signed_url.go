@@ -7,9 +7,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func (s *Storage) GetSignedUrl(key string, duration time.Duration) (string, error) {
-	cfg := s.Config
+type ObjectSignedUrlInput struct {
+	Bucket   string
+	Key      string
+	Duration time.Duration
+}
 
+func (s *Storage) GetSignedUrl(i *ObjectSignedUrlInput) (string, error) {
 	sess, err := s.GetSession()
 	if err != nil {
 		return "", err
@@ -17,14 +21,13 @@ func (s *Storage) GetSignedUrl(key string, duration time.Duration) (string, erro
 
 	client := s3.New(sess)
 
-	i := &s3.GetObjectInput{
-		Bucket: aws.String(cfg.Bucket),
-		Key:    aws.String(key),
-	}
+	req, _ := client.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(i.Bucket),
+		Key:    aws.String(i.Key),
+	},
+	)
 
-	req, _ := client.GetObjectRequest(i)
-
-	url, err := req.Presign(duration)
+	url, err := req.Presign(i.Duration)
 
 	if err != nil {
 		return "", err

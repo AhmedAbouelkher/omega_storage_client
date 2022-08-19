@@ -7,8 +7,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-type ObjectInput struct {
-	Reader   io.Reader
+type UploadObjectInput struct {
+	Body     io.Reader
+	Bucket   string
 	Key      string
 	Metadata map[string]string
 }
@@ -18,9 +19,7 @@ type ObjectUploadOutput struct {
 	ETag     string
 }
 
-func (s *Storage) Upload(obj *ObjectInput) (*ObjectUploadOutput, error) {
-	cfg := s.Config
-
+func (s *Storage) Upload(u *UploadObjectInput) (*ObjectUploadOutput, error) {
 	sess, err := s.GetSession()
 	if err != nil {
 		return nil, err
@@ -30,18 +29,18 @@ func (s *Storage) Upload(obj *ObjectInput) (*ObjectUploadOutput, error) {
 
 	// Upload the file to S3.
 	result, err := svc.Upload(&s3manager.UploadInput{
-		Bucket:   aws.String(cfg.Bucket),
-		Key:      aws.String(obj.Key),
-		Body:     obj.Reader,
-		Metadata: aws.StringMap(obj.Metadata),
+		Bucket:   aws.String(u.Bucket),
+		Key:      aws.String(u.Key),
+		Body:     u.Body,
+		Metadata: aws.StringMap(u.Metadata),
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	u := &ObjectUploadOutput{
+	ur := &ObjectUploadOutput{
 		Location: result.Location,
 		ETag:     *result.ETag,
 	}
-	return u, nil
+	return ur, nil
 }

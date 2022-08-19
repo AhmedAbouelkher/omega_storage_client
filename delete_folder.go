@@ -6,11 +6,11 @@ import (
 )
 
 type DeleteFolderInput struct {
-	Key string
+	Bucket string
+	Key    string
 }
 
 func (s *Storage) DeleteFolder(d *DeleteFolderInput) error {
-	cfg := s.Config
 	sess, err := s.GetSession()
 	if err != nil {
 		return err
@@ -19,7 +19,7 @@ func (s *Storage) DeleteFolder(d *DeleteFolderInput) error {
 	client := s3.New(sess)
 
 	i := &s3.ListObjectsInput{
-		Bucket: aws.String(cfg.Bucket),
+		Bucket: aws.String(d.Bucket),
 		Prefix: aws.String(d.Key),
 	}
 	resp, err := client.ListObjects(i)

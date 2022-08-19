@@ -9,18 +9,18 @@ import (
 )
 
 type BatchDeleteInput struct {
-	Keys []string
+	Bucket string
+	Keys   []string
 }
 
 func (s *Storage) BatchDelete(b *BatchDeleteInput) error {
-	cfg := s.Config
 	sess, err := s.GetSession()
 	if err != nil {
 		return err
 	}
 
 	bd := s3manager.NewBatchDelete(sess)
-	itr := configureDeleteIter(b, cfg)
+	itr := configureDeleteIter(b)
 
 	if err := bd.Delete(context.Background(), itr); err != nil {
 		return err
@@ -29,13 +29,13 @@ func (s *Storage) BatchDelete(b *BatchDeleteInput) error {
 	return nil
 }
 
-func configureDeleteIter(b *BatchDeleteInput, cfg *S3Config) *s3manager.DeleteObjectsIterator {
+func configureDeleteIter(b *BatchDeleteInput) *s3manager.DeleteObjectsIterator {
 	var objects []s3manager.BatchDeleteObject
 	for _, k := range b.Keys {
 
 		objects = append(objects, s3manager.BatchDeleteObject{
 			Object: &s3.DeleteObjectInput{
-				Bucket: aws.String(cfg.Bucket),
+				Bucket: aws.String(b.Bucket),
 				Key:    aws.String(k),
 			},
 		})

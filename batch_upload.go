@@ -9,13 +9,12 @@ import (
 )
 
 type BatchUploadInput struct {
-	Objects []*ObjectInput
+	Bucket  string
+	Objects []*UploadObjectInput
 	Folder  string
 }
 
 func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
-	cfg := s.Config
-
 	sess, err := s.GetSession()
 	if err != nil {
 		return nil, err
@@ -23,7 +22,7 @@ func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
 
 	// Create an uploader with the session and default options
 	svc := s3manager.NewUploader(sess)
-	iter := configureUploadIter(b, cfg)
+	iter := configureUploadIter(b)
 
 	if err := svc.UploadWithIterator(context.Background(), iter); err != nil {
 		return nil, err
@@ -32,15 +31,15 @@ func (s *Storage) BatchUpload(b *BatchUploadInput) (any, error) {
 	return nil, nil
 }
 
-func configureUploadIter(b *BatchUploadInput, cfg *S3Config) *s3manager.UploadObjectsIterator {
+func configureUploadIter(b *BatchUploadInput) *s3manager.UploadObjectsIterator {
 	var objects []s3manager.BatchUploadObject
 	for _, o := range b.Objects {
 
 		objects = append(objects, s3manager.BatchUploadObject{
 			Object: &s3manager.UploadInput{
-				Bucket:   aws.String(cfg.Bucket),
+				Bucket:   aws.String(b.Bucket),
 				Key:      aws.String(path.Join(b.Folder, o.Key)),
-				Body:     o.Reader,
+				Body:     o.Body,
 				Metadata: aws.StringMap(o.Metadata),
 			},
 		})

@@ -8,7 +8,6 @@ import (
 
 type S3Config struct {
 	Region    string
-	Bucket    string
 	AccessKey string
 	Secret    string
 	Endpoint  string

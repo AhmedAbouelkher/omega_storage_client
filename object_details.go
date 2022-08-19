@@ -5,13 +5,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+type ObjectMetadataInput struct {
+	Bucket string
+	Key    string
+}
+
 type ObjectMetadataOutput struct {
 	Metadata map[string]string
 }
 
-func (s *Storage) GetMetadata(key string) (*ObjectMetadataOutput, error) {
-	cfg := s.Config
-
+func (s *Storage) GetMetadata(i *ObjectMetadataInput) (*ObjectMetadataOutput, error) {
 	sess, err := s.GetSession()
 	if err != nil {
 		return nil, err
@@ -20,8 +23,8 @@ func (s *Storage) GetMetadata(key string) (*ObjectMetadataOutput, error) {
 	client := s3.New(sess)
 
 	md, err := client.HeadObject(&s3.HeadObjectInput{
-		Bucket: aws.String(cfg.Bucket),
-		Key:    aws.String(key),
+		Bucket: aws.String(i.Bucket),
+		Key:    aws.String(i.Key),
 	})
 
 	if err != nil {

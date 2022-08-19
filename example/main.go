@@ -10,7 +10,9 @@ import (
 func main() {
 	s := omegastorage.Storage{
 		Config: &omegastorage.S3Config{
-			Bucket: "my-bucket",
+			Region:    "us-east-1",
+			AccessKey: "AKIAJXQZQQ7QQQQQQQQ",
+			Secret:    "123456789",
 		},
 	}
 
@@ -20,9 +22,10 @@ func main() {
 	}
 	defer f.Close()
 
-	out, err := s.Upload(&omegastorage.ObjectInput{
+	out, err := s.Upload(&omegastorage.UploadObjectInput{
+		Bucket: "my-bucket",
 		Key:    "my-key",
-		Reader: f,
+		Body:   f,
 	})
 	if err != nil {
 		log.Fatal(err)
