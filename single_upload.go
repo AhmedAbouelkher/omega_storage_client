@@ -41,7 +41,7 @@ func (s *Storage) Upload(u *UploadObjectInput) (*ObjectUploadOutput, error) {
 
 	ur := &ObjectUploadOutput{
 		Location: result.Location,
-		ETag:     strings.Trim(*result.ETag, "\""),
+		ETag:     strings.Trim(aws.StringValue(result.ETag), "\""),
 	}
 	return ur, nil
 }

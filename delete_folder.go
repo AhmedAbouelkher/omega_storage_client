@@ -32,5 +32,10 @@ func (s *Storage) DeleteFolder(d *DeleteFolderInput) error {
 		keys = append(keys, *o.Key)
 	}
 
-	return s.BatchDelete(&BatchDeleteInput{Keys: keys})
+	return s.BatchDelete(
+		&BatchDeleteInput{
+			Bucket: d.Bucket,
+			Keys:   keys,
+		},
+	)
 }
