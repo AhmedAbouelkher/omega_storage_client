@@ -13,12 +13,14 @@ type S3Config struct {
 	Secret           string
 	Endpoint         string
 	EndpointResolver endpoints.ResolverFunc
+	S3ForcePathStyle bool
 }
 
-func (c *S3Config) GetSession() (*session.Session, error) {
+func (c *S3Config) getSession() (*session.Session, error) {
 	cfg := &aws.Config{
-		Region:      aws.String(c.Region),
-		Credentials: credentials.NewStaticCredentials(c.AccessKey, c.Secret, ""),
+		Region:           aws.String(c.Region),
+		Credentials:      credentials.NewStaticCredentials(c.AccessKey, c.Secret, ""),
+		S3ForcePathStyle: aws.Bool(c.S3ForcePathStyle),
 	}
 
 	if c.Endpoint != "" {

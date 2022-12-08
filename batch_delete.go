@@ -14,7 +14,7 @@ type BatchDeleteInput struct {
 }
 
 func (s *Storage) BatchDelete(b *BatchDeleteInput) error {
-	sess, err := s.GetSession()
+	sess, err := s.getSession()
 	if err != nil {
 		return err
 	}

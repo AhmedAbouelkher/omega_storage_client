@@ -21,7 +21,7 @@ type ObjectUploadOutput struct {
 }
 
 func (s *Storage) Upload(u *UploadObjectInput) (*ObjectUploadOutput, error) {
-	sess, err := s.GetSession()
+	sess, err := s.getSession()
 	if err != nil {
 		return nil, err
 	}

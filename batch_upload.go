@@ -15,7 +15,7 @@ type BatchUploadInput struct {
 }
 
 func (s *Storage) BatchUpload(b *BatchUploadInput) error {
-	sess, err := s.GetSession()
+	sess, err := s.getSession()
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ type DeleteFolderInput struct {
 }
 
 func (s *Storage) DeleteFolder(d *DeleteFolderInput) error {
-	sess, err := s.GetSession()
+	sess, err := s.getSession()
 	if err != nil {
 		return err
 	}

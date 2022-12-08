@@ -15,7 +15,7 @@ type ObjectMetadataOutput struct {
 }
 
 func (s *Storage) GetMetadata(i *ObjectMetadataInput) (*ObjectMetadataOutput, error) {
-	sess, err := s.GetSession()
+	sess, err := s.getSession()
 	if err != nil {
 		return nil, err
 	}
