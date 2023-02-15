@@ -27,7 +27,6 @@ func (s *Storage) Upload(u *UploadObjectInput) (*ObjectUploadOutput, error) {
 	}
 	// Create an svc with the session and default options
 	svc := s3manager.NewUploader(sess)
-
 	// Upload the file to S3.
 	result, err := svc.Upload(&s3manager.UploadInput{
 		Bucket:   aws.String(u.Bucket),
@@ -38,7 +37,6 @@ func (s *Storage) Upload(u *UploadObjectInput) (*ObjectUploadOutput, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	ur := &ObjectUploadOutput{
 		Location: result.Location,
 		ETag:     strings.Trim(aws.StringValue(result.ETag), "\""),

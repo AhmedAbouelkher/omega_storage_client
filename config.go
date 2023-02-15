@@ -22,19 +22,15 @@ func (c *S3Config) getSession() (*session.Session, error) {
 		Credentials:      credentials.NewStaticCredentials(c.AccessKey, c.Secret, ""),
 		S3ForcePathStyle: aws.Bool(c.S3ForcePathStyle),
 	}
-
 	if c.Endpoint != "" {
 		cfg.Endpoint = aws.String(c.Endpoint)
 	}
-
 	if c.EndpointResolver != nil {
 		cfg.EndpointResolver = c.EndpointResolver
 	}
-
 	s, err := session.NewSession(cfg)
 	if err != nil {
 		return nil, err
 	}
-
 	return s, nil
 }
